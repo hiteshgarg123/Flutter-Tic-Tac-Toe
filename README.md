@@ -22,7 +22,7 @@ There are number of ways in which the project can be enhanced , some of them are
 
 |                                             |                                             |                                             |
 | ------------------------------------------- | ------------------------------------------- | ------------------------------------------- |
-| <img src="screenshots/1ss.png" width="400"> | <img src="screenshots/2ss.png" width="400"> | <img src="screenshots/3ss.png" width="400"> |
+| <img src="Screenshots/1ss.png" width="400"> | <img src="Screenshots/2ss.png" width="400"> | <img src="Screenshots/3ss.png" width="400"> |
 
 ## Contact me 📧
 
