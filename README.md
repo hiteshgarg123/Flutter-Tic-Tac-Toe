@@ -2,7 +2,7 @@
 
 A basic TIC-TAC-TOE Game written from scratch by me in Flutter.
 
-## ⭐️ this repo if you like it.
+⭐️ this repo if you like it.
 
 ## Getting Started
 
