@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'dart:async';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -12,7 +12,6 @@ class _HomePageState extends State<HomePage> {
   AssetImage edit = AssetImage('images/edit.png');
 
   bool isCross = true;
-  String message;
 
   List<String> gameState;
 
@@ -31,17 +30,30 @@ class _HomePageState extends State<HomePage> {
         "empty",
         "empty",
       ];
-      this.message = "";
     });
   }
+
+  AlertStyle alertStyle = AlertStyle(
+    animationType: AnimationType.grow,
+    animationDuration: Duration(
+      milliseconds: 500,
+    ),
+    alertBorder: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(20.0),
+    ),
+    titleStyle: TextStyle(
+      fontSize: 30.0,
+      fontWeight: FontWeight.bold,
+    ),
+  );
 
   void playGame(int index) {
     if (gameState[index] == 'empty') {
       setState(() {
         if (isCross) {
-          this.gameState[index] = 'Cross';
+          this.gameState[index] = 'cross';
         } else {
-          this.gameState[index] = 'Circle';
+          this.gameState[index] = 'circle';
         }
         this.isCross = !this.isCross;
         this.checkWin();
@@ -49,99 +61,146 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  alertDialogueBoxForWin(context, index) {
+    Alert(
+      closeFunction: resetGame,
+      context: context,
+      title: '${this.gameState[index]} Wins',
+      buttons: [
+        DialogButton(
+          child: Text(
+            'OK',
+            style: TextStyle(
+              fontSize: 25.0,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+      ],
+      image: Image(
+        image: getImage(this.gameState[index]),
+        height: 80.0,
+        width: 80.0,
+        fit: BoxFit.cover,
+      ),
+      style: alertStyle,
+    ).show();
+  }
+
+  alertDialogueBoxForDraw(context) {
+    Alert(
+      context: context,
+      closeFunction: resetGame,
+      title: 'GAME DRAW',
+      buttons: [
+        DialogButton(
+          child: Text(
+            'OK',
+            style: TextStyle(
+              fontSize: 25.0,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+      ],
+      content: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Image(
+            image: AssetImage("images/cross.png"),
+            height: 80.0,
+            width: 80.0,
+            fit: BoxFit.cover,
+          ),
+          Image(
+            image: AssetImage("images/circle.png"),
+            height: 80.0,
+            width: 80.0,
+            fit: BoxFit.cover,
+          ),
+        ],
+      ),
+      style: alertStyle,
+    ).show();
+  }
+
   void checkWin() {
     if ((this.gameState[0] != 'empty') &&
         (this.gameState[0] == this.gameState[1]) &&
         (this.gameState[1] == this.gameState[2])) {
       setState(() {
-        this.message = '${this.gameState[0]} wins';
+        alertDialogueBoxForWin(context, 0);
+        resetGame();
       });
     } else if ((this.gameState[3] != 'empty') &&
         (this.gameState[3] == this.gameState[4]) &&
         (this.gameState[4] == this.gameState[5])) {
       setState(() {
-        this.message = '${this.gameState[3]} wins';
+        alertDialogueBoxForWin(context, 3);
+        resetGame();
       });
     } else if ((this.gameState[6] != 'empty') &&
         (this.gameState[6] == this.gameState[7]) &&
         (this.gameState[7] == this.gameState[8])) {
       setState(() {
-        this.message = '${this.gameState[6]} wins';
+        alertDialogueBoxForWin(context, 6);
+        resetGame();
       });
     } else if ((this.gameState[0] != 'empty') &&
         (this.gameState[0] == this.gameState[3]) &&
         (this.gameState[3] == this.gameState[6])) {
       setState(() {
-        this.message = '${this.gameState[0]} wins';
+        alertDialogueBoxForWin(context, 0);
+        resetGame();
       });
     } else if ((this.gameState[1] != 'empty') &&
         (this.gameState[1] == this.gameState[4]) &&
         (this.gameState[4] == this.gameState[7])) {
       setState(() {
-        this.message = '${this.gameState[1]} wins';
+        alertDialogueBoxForWin(context, 1);
+        resetGame();
       });
     } else if ((this.gameState[2] != 'empty') &&
         (this.gameState[2] == this.gameState[5]) &&
         (this.gameState[5] == this.gameState[8])) {
       setState(() {
-        this.message = '${this.gameState[2]} wins';
+        alertDialogueBoxForWin(context, 2);
+        resetGame();
       });
     } else if ((this.gameState[0] != 'empty') &&
         (this.gameState[0] == this.gameState[4]) &&
         (this.gameState[4] == this.gameState[8])) {
       setState(() {
-        this.message = '${this.gameState[0]} wins';
+        alertDialogueBoxForWin(context, 0);
+        resetGame();
       });
     } else if ((this.gameState[2] != 'empty') &&
         (this.gameState[2] == this.gameState[4]) &&
         (this.gameState[4] == this.gameState[6])) {
       setState(() {
-        this.message = '${this.gameState[2]} wins';
+        alertDialogueBoxForWin(context, 2);
+        resetGame();
       });
     } else if (!gameState.contains('empty')) {
       setState(() {
-        this.message = 'GAME DRAWS';
-      });
-    }
-    if (this.message.isNotEmpty) {
-      setState(() {
-        this.resetAfterNoWin();
+        this.alertDialogueBoxForDraw(context);
+        resetGame();
       });
     }
   }
 
-  resetAfterNoWin() {
-    Timer(
-        Duration(
-          seconds: 3,
-        ), () {
-      setState(() {
-        this.gameState = [
-          "empty",
-          "empty",
-          "empty",
-          "empty",
-          "empty",
-          "empty",
-          "empty",
-          "empty",
-          "empty",
-        ];
-        this.message = '';
-      });
-    });
-  }
-
-  AssetImage getImage(String value) {
+  getImage(String value) {
     switch (value) {
       case ('empty'):
         return edit;
         break;
 
-      case ('Cross'):
+      case ('cross'):
         return cross;
         break;
-      case ('Circle'):
+      case ('circle'):
         return circle;
         break;
     }
@@ -160,26 +219,6 @@ class _HomePageState extends State<HomePage> {
         "empty",
         "empty",
       ];
-      this.message = '';
-    });
-  }
-
-  void resetAfterWin() {
-    Timer(Duration(microseconds: 2000), () {
-      setState(() {
-        this.gameState = [
-          "empty",
-          "empty",
-          "empty",
-          "empty",
-          "empty",
-          "empty",
-          "empty",
-          "empty",
-          "empty",
-        ];
-        this.message = '';
-      });
     });
   }
 
@@ -220,17 +259,6 @@ class _HomePageState extends State<HomePage> {
                     image: this.getImage(this.gameState[i]),
                   ),
                 ),
-              ),
-            ),
-          ),
-          Container(
-            padding: EdgeInsets.all(20.0),
-            child: Text(
-              this.message,
-              style: TextStyle(
-                fontFamily: 'Advent_Pro',
-                fontSize: 37.0,
-                fontWeight: FontWeight.w700,
               ),
             ),
           ),
