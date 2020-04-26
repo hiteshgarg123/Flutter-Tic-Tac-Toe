@@ -65,7 +65,7 @@ class _HomePageState extends State<HomePage> {
     Alert(
       closeFunction: resetGame,
       context: context,
-      title: '${this.gameState[index]} Wins',
+      title: '${this.gameState[index]} won',
       buttons: [
         DialogButton(
           child: Text(
